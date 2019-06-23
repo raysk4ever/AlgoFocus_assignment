@@ -1,7 +1,10 @@
+const error = require("./middelware/error");
 const config = require("config");
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+
+require("./startup/prod");
 
 if (!config.get("jwtPrivateKey")) {
   console.log("FATAL ERROR: jwtPrivateKey is not defined.");
@@ -22,6 +25,8 @@ app.use(express.json());
 app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use("/api/movie", movie);
+
+app.use(error);
 
 app.listen(3000, () => {
   console.log(`listing port number 3000...`);

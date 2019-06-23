@@ -1,3 +1,5 @@
+require("express-async-errors");
+const asyncMiddleware = require('../middelware/async');
 const auth = require("../middelware/auth");
 const admin = require("../middelware/admin");
 const express = require("express");
@@ -7,6 +9,7 @@ const mongoose = require("mongoose");
 const { Movie, validateMovie } = require("../modules/movie");
 
 router.get("/", async(req, res) => {
+  throw new Error('Could not get the genres');
   const movies = await Movie.find().sort("name");
   res.send(movies);
 });
@@ -24,7 +27,7 @@ movie = await movie.save();
 res.send(movie);
 });
 
-router.delete("/:id", [auth, admin],async(req, res)=>{
+router.delete("/:id", [auth, admin], async(req, res)=>{
     const movie = await Movie.findByIdAndRemove(req.params.id);
     if(!movie) return res.status(404).send("This Movie with given id not found");
 
