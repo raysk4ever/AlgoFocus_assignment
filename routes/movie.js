@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 const { Movie, validateMovie } = require("../modules/movie");
 
 router.get("/", async(req, res) => {
-  throw new Error('Could not get the genres');
+  // throw new Error('Could not get the genres');
   const movies = await Movie.find().sort("name");
   res.send(movies);
 });
