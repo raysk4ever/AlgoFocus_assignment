@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
+const config = require("config");
 
 module.exports = function() {
+  const db = config.get("db");
   mongoose
-    .connect("mongodb://localhost/user")
+    .connect(db)
     .then(() => console.log("connected to mongodb.."))
     .catch(err => console.error("could not connect to mongodb"));
 };
