@@ -1,5 +1,5 @@
 require("express-async-errors");
-const asyncMiddleware = require('../middelware/async');
+const asyncMiddleware = require("../middelware/async");
 const auth = require("../middelware/auth");
 const admin = require("../middelware/admin");
 const express = require("express");
@@ -8,32 +8,31 @@ const mongoose = require("mongoose");
 
 const { Movie, validateMovie } = require("../modules/movie");
 
-router.get("/", async(req, res) => {
+router.get("/", async (req, res) => {
   // throw new Error('Could not get the genres');
   const movies = await Movie.find().sort("name");
   res.send(movies);
 });
 
-router.post("/",auth, async (req, res) => {
+router.post("/", auth, async (req, res) => {
+  const { error } = validateMovie(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
-    const {error} = validateMovie(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
-
-    let = movie = new Movie({name: req.body.name,
+  let movie = new Movie({
+    name: req.body.name,
     rating: req.body.rating,
-genres: req.body.genres});
+    genres: req.body.genres
+  });
 
-movie = await movie.save();
-res.send(movie);
+  movie = await movie.save();
+  res.send(movie);
 });
 
-router.delete("/:id", [auth, admin], async(req, res)=>{
-    const movie = await Movie.findByIdAndRemove(req.params.id);
-    if(!movie) return res.status(404).send("This Movie with given id not found");
+router.delete("/:id", [auth, admin], async (req, res) => {
+  const movie = await Movie.findByIdAndRemove(req.params.id);
+  if (!movie) return res.status(404).send("This Movie with given id not found");
 
-    res.send(movie);
+  res.send(movie);
 });
-
 
 module.exports = router;
-
