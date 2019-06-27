@@ -9,10 +9,11 @@ const algo = require("../routes/algo");
 module.exports = function(app) {
   app.use(express.json());
 
+  app.set("view engine", "ejs");
   app.use("/api/users", users);
   app.use("/api/auth", auth);
   app.use("/api/movie", movie);
   app.use("/api/vec", vec);
   app.use("/api/algo", algo);
-  app.use(error);
+  // app.use(error);
 };
